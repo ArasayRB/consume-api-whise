@@ -13,14 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->prefix('consume-api-whise')->group(function () {
+Route::middleware(['auth:sanctum', 'verified'])
+       ->get('/', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])
+       ->name('apiWithJWT');
+
+
+/*Route::middleware(['auth:sanctum', 'verified'])->prefix('consume-api-whise')->group(function () {
     Route::get('estates/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])->name('apiWithJWT');
-});
+});*/

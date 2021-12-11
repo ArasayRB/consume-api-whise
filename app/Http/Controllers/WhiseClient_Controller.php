@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Request;
-//use Illuminate\Http\Request;
+//use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request;
 
 class WhiseClient_Controller extends Controller
 {
+  /**
+  * Get Http Header using Bearer token.
+  */
   public static function getHttpHeaders()
   {
     $bearerToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImlhdCI6MTYzODgxNzM3MH0.eyJzZXJ2aWNlQ29uc3VtZXJJZCI6MTg3LCJ0eXBlSWQiOjcsImNsaWVudElkIjoyNTkwLCJvZmZpY2VJZCI6NDM2OH0.wqcbLPs4I0YAa0HN4rxiV5S0waqx7SI2_Ckv_CwubJo';
@@ -24,8 +27,9 @@ class WhiseClient_Controller extends Controller
     return $headers;
   }
 
-
-
+  /**
+  * Connection to api rest whise using GuzzleHttp.
+  */
   public function apiWithJWT()
   {
     $client = new Client(self::getHttpHeaders());
@@ -48,12 +52,12 @@ class WhiseClient_Controller extends Controller
     $response = $client->post($url, [
       'json' => $params
     ]);
-    $resp['statusCode'] = $response->getStatusCode();
-    $resp['bodyContents'] = $response->getBody()->getContents();
-    return $resp;
+    //$resp['statusCode'] = $response->getStatusCode();
+    //$resp['bodyContents'] = $response->getBody()->getContents();
+    //return $resp;
 
-      //$responseBody = json_decode($response->getBody());
+    $responseBody = json_decode($response->getBody());
 
-      //return $responseBody;//view('projects.apiwithkey', compact('responseBody'));
+    return $responseBody;//view('projects.apiwithkey', compact('responseBody'));
   }
 }

@@ -34,7 +34,8 @@
             @endif
 
             <!-- Page Content -->
-            <main>              
+            <main>
+              <p class="text-center text-5xl bg-gray-100 pt-5">{{__('Arasay Rodriguez Bastida')}}</p>              
                 {{ $slot }}
             </main>
         </div>
