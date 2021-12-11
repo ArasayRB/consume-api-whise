@@ -18,6 +18,7 @@
     </head>
     <body>
         <div class="font-sans text-gray-900 antialiased">
+          <p class="text-center text-5xl bg-gray-100 mt-5">{{__('Arasay Rodriguez Bastida')}}</p>
             {{ $slot }}
         </div>
     </body>
