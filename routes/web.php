@@ -13,28 +13,10 @@ use App\Http\Livewire\WhiseList;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::middleware(['auth:sanctum', 'verified'])
+Route::redirect('/','/dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')
        ->group(function(){
-         Route::get('/', WhiseList::class);
-         Route::get('/dashboard', function () {
-             return view('dashboard');
-         })->name('dashboard');
+         Route::get('/', WhiseList::class)->name('dashboard');
          Route::get('/estates/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])
          ->name('apiWithJWT');
        });
-//Route::middleware(['auth:sanctum', 'verified'])
-//       ->get('/', WhiseList::class);
-
-//Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-//    return view('dashboard');
-//})->name('dashboard');
-
-//Route::middleware(['auth:sanctum', 'verified'])
-//       ->get('/estates/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])
-//       ->name('apiWithJWT');
-
-
-/*Route::middleware(['auth:sanctum', 'verified'])->prefix('consume-api-whise')->group(function () {
-    Route::get('estates/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])->name('apiWithJWT');
-});*/
