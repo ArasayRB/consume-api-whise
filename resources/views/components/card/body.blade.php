@@ -16,6 +16,13 @@
       @isset($estate->purposeStatus->id)
         {{$estate->purposeStatus->id}}
       @endisset
+
+      @isset($estate->statusSale)
+        @if ($estate->statusSale!='')
+          ({{$estate->statusSale}})
+        @endif
+      @endisset
+
     </p>
     <div class="mt-4 flex">
       <x-card.buttons.button>{{__('Recordatorios')}}</x-card.buttons.button>

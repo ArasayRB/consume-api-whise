@@ -16,7 +16,7 @@ class WhiseList extends Component
   public $status;
   public $filters=[
     'address'=>'',
-    'purposeStatus'=>''
+    'statusSale'=>''
   ];
 
   /**
@@ -27,6 +27,18 @@ class WhiseList extends Component
   public function getAddressProperty()
   {
     $filtered= $this->estates->where('address',$this->filters['address']);
+
+    return $filtered;
+  }
+
+  /**
+  * Filter by Status Sale
+  *
+  * @return array
+  */
+  public function getStatusSaleProperty()
+  {
+    $filtered= $this->estates->where('statusSale',$this->filters['statusSale']);
 
     return $filtered;
   }
@@ -109,6 +121,32 @@ class WhiseList extends Component
   }
 
   /**
+  * Set status to Property
+  *
+  * @return void
+  */
+  public function setStatusProperty()
+  {
+    for ($i=0; $i < count($this->estates); $i++) {
+      if ($this->estates[$i]->purposeStatus->id=='3' || $this->estates[$i]->purposeStatus->id=='17') {
+        $this->estates[$i]->statusSale='sold';
+      }
+      elseif ($this->estates[$i]->purposeStatus->id=='5' || $this->estates[$i]->purposeStatus->id=='16') {
+        $this->estates[$i]->statusSale='under-offer';
+      }
+      elseif ($this->estates[$i]->purposeStatus->id=='12') {
+        $this->estates[$i]->statusSale='owner-s';
+      }
+      elseif ($this->estates[$i]->purposeStatus->id=='13') {
+        $this->estates[$i]->statusSale='owner-r';
+      }
+      elseif ($this->estates[$i]->purposeStatus->id=='1' || $this->estates[$i]->purposeStatus->id=='15') {
+        $this->estates[$i]->statusSale='for-sale';
+      }
+    }
+  }
+
+  /**
   * Connection to api rest whise using GuzzleHttp.
   *
   * @return array
@@ -125,6 +163,7 @@ class WhiseList extends Component
 
       $responseBody = json_decode($response->getBody());
       $this->estates=collect($responseBody->estates);
+      self::setStatusProperty();
       $this->status=collect(self::getStatusProperty());
       if ($this->filters['address']!='') {
         return self::getAddressProperty();//$this->estates->where('address',$this->filters['address']);
