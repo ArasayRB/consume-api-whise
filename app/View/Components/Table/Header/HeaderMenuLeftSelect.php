@@ -7,13 +7,20 @@ use Illuminate\View\Component;
 class HeaderMenuLeftSelect extends Component
 {
     /**
+     * The property status.
+     *
+     * @var string
+     */
+    public $selected;
+
+    /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($selected)
     {
-        //
+        $this->selected=$selected;
     }
 
     /**

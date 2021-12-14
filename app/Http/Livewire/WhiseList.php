@@ -144,7 +144,8 @@ class WhiseList extends Component
     //return $filtered->all();
       $paginate=self::mount();
       return view('livewire.whise-list',[
-            'paginate'=> $paginate->paginate(10)
+            'paginate'=> $paginate->paginate(10),
+            'selected'=>$this->status->keys()
         ]);
   }
 }

@@ -1,6 +1,6 @@
   <div>
     <x-table.table-ppal>
-	  	<x-table.header.header-menu-left-select>
+	  	<x-table.header.header-menu-left-select :selected="$selected">
 		  </x-table.header.header-menu-left-select>
 	  	<x-table.header.header-menu-right>
 		  		<x-table.header.header-menu-right-button>
