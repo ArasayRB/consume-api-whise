@@ -6,12 +6,30 @@ use Livewire\Component;use GuzzleHttp\Client;
 use Livewire\WithPagination;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
+use App\Models\Whise\WhiseList as WhiseModel;
 
 class WhiseList extends Component
 {
   use WithPagination;
+
   public $estates;
   public $status;
+  public $filters=[
+    'address'=>'',
+    'purposeStatus'=>''
+  ];
+
+  /**
+  * Filter by Address
+  *
+  * @return array
+  */
+  public function getAddressProperty()
+  {
+    $filtered= $this->estates->where('address',$this->filters['address']);
+
+    return $filtered;
+  }
 
   /**
   * Get Http Header using Bearer token.
@@ -108,6 +126,10 @@ class WhiseList extends Component
       $responseBody = json_decode($response->getBody());
       $this->estates=collect($responseBody->estates);
       $this->status=collect(self::getStatusProperty());
+      if ($this->filters['address']!='') {
+        return self::getAddressProperty();//$this->estates->where('address',$this->filters['address']);
+      }
+
       return $this->estates;
   }
 
@@ -118,6 +140,8 @@ class WhiseList extends Component
   */
   public function render()
   {
+    //$filtered= $this->estates
+    //return $filtered->all();
       $paginate=self::mount();
       return view('livewire.whise-list',[
             'paginate'=> $paginate->paginate(10)

@@ -7,7 +7,7 @@
 		  			{{__('Sincronizar')}}
 		  		</x-table.header.header-menu-right-button>
           <x-table.header.header-menu-right-search>
-  		  		<input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="Búsqueda por nombre...">
+  		  		<input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="Búsqueda por nombre..." wire:model="filters.address">
           </x-table.header.header-menu-right-search>
 		  </x-table.header.header-menu-right>
 		</div>
@@ -45,7 +45,7 @@
 
 						</thead>
 					</table>
-          {{ $paginate->links('pagination',['is_livewire' => true]) }}					
+          {{ $paginate->links('pagination',['is_livewire' => true]) }}
       </x-table.table-list>
 	</x-table.table-ppal>
 </div>
