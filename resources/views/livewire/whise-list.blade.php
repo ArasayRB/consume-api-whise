@@ -3,12 +3,12 @@
 	  	<x-table.header.header-menu-left-select :selected="$selected">
 		  </x-table.header.header-menu-left-select>
 	  	<x-table.header.header-menu-right>
-		  		<x-table.header.header-menu-right-button>
-		  			{{__('Sincronizar')}}
-		  		</x-table.header.header-menu-right-button>
-          <x-table.header.header-menu-right-search>
-  		  		<input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="Búsqueda por nombre..." wire:model="filters.address">
-          </x-table.header.header-menu-right-search>
+        <x-table.header.header-menu-right-search>
+          <input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="Búsqueda por nombre..." wire:model="filters.address">
+        </x-table.header.header-menu-right-search>
+		  	<x-table.header.header-menu-right-button>
+		  		{{__('Sincronizar')}}
+		  	</x-table.header.header-menu-right-button>
 		  </x-table.header.header-menu-right>
 		</div>
 		<div>

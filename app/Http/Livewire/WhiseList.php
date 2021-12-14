@@ -44,6 +44,37 @@ class WhiseList extends Component
   }
 
   /**
+  * Filter by
+  *
+  * @return array
+  */
+  public function getFilterProperty()
+  {
+    $filtered= $this->estates->where('statusSale',$this->filters['statusSale']);
+
+    return $filtered->where('address',$this->filters['address']);
+  }
+
+  /**
+  * Search by
+  *
+  * @return array
+  */
+  public function searchBy()
+  {
+    if ($this->filters['address']!='' && $this->filters['statusSale']=='') {
+      return self::getAddressProperty();//$this->estates->where('address',$this->filters['address']);
+    }
+    elseif ($this->filters['statusSale']!='' && $this->filters['address']=='') {
+      return self::getStatusSaleProperty();
+    }
+    elseif ($this->filters['statusSale']!='' && $this->filters['address']!='') {
+      return self::getFilterProperty();
+    }
+    return '';
+  }
+
+  /**
   * Get Http Header using Bearer token.
   *
   * @return array
@@ -165,9 +196,12 @@ class WhiseList extends Component
       $this->estates=collect($responseBody->estates);
       self::setStatusProperty();
       $this->status=collect(self::getStatusProperty());
-      if ($this->filters['address']!='') {
-        return self::getAddressProperty();//$this->estates->where('address',$this->filters['address']);
-      }
+
+      $results=self::searchBy();
+
+      if ($results!='') {
+        return $results;
+      }      
 
       return $this->estates;
   }
