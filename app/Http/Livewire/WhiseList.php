@@ -3,18 +3,20 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;use GuzzleHttp\Client;
+use Livewire\WithPagination;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
-use App\Http\Controllers\WhiseClient_Controller;
 
 class WhiseList extends Component
 {
+  use WithPagination;
   public $estates;
-  public $paginate;
   public $status;
 
   /**
   * Get Http Header using Bearer token.
+  *
+  * @return array
   */
   public static function getHttpHeaders()
   {
@@ -33,6 +35,8 @@ class WhiseList extends Component
 
   /**
   * Get Http Params.
+  *
+  * @return array
   */
   public function getParams()
   {
@@ -51,6 +55,8 @@ class WhiseList extends Component
 
   /**
   *Get Status of Property
+  *
+  * @return array
   */
   public function getStatusProperty()
   {
@@ -86,6 +92,8 @@ class WhiseList extends Component
 
   /**
   * Connection to api rest whise using GuzzleHttp.
+  *
+  * @return array
   */
   public function mount()
   {
@@ -98,16 +106,21 @@ class WhiseList extends Component
       ]);
 
       $responseBody = json_decode($response->getBody());
-      $this->estates=collect($responseBody->estates)->all();
-      $this->paginate=collect($responseBody->totalCount);
+      $this->estates=collect($responseBody->estates);
       $this->status=collect(self::getStatusProperty());
+      return $this->estates;
   }
 
+  /**
+  * Connection to api rest whise using GuzzleHttp.
+  *
+  * @return array
+  */
   public function render()
   {
+      $paginate=self::mount();
       return view('livewire.whise-list',[
-            'estates' => $this->estates,
-            'paginate'=> $this->paginate
+            'paginate'=> $paginate->paginate(10)
         ]);
   }
 }
