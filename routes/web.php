@@ -13,10 +13,10 @@ use App\Http\Livewire\WhiseList;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::redirect('/','/dashboard');
-Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')
+Route::redirect('/','/dashboard/estates');
+Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard/estates')
        ->group(function(){
          Route::get('/', WhiseList::class)->name('dashboard');
-         Route::get('/estates/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])
+         Route::get('/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])
          ->name('apiWithJWT');
        });
