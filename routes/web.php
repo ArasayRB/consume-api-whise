@@ -17,6 +17,10 @@ Route::redirect('/','/dashboard/estates');
 Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard/estates')
        ->group(function(){
          Route::get('/', WhiseList::class)->name('dashboard');
+         Route::get('/tasks',function()
+         {
+           return view('app');
+         });
          Route::get('/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])
          ->name('apiWithJWT');
        });
