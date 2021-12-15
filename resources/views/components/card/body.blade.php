@@ -25,9 +25,15 @@
 
     </p>
     <div class="mt-4 flex">
-      <x-card.buttons.button>{{__('Recordatorios')}}</x-card.buttons.button>
-      <x-card.buttons.button>{{__('Editar')}}</x-card.buttons.button>
-      <x-card.buttons.button>{{__('Eliminar')}}</x-card.buttons.button>
+      <a href="/dashboard/estates/tasks" class="btn bg-indigo-600 mr-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+        {{__('Recordatorios')}}
+      </a>
+      <a href="#" class="btn bg-indigo-600 mr-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+        {{__('Editar')}}
+      </a>
+      <a href="#" class="btn bg-indigo-600 mr-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+        {{__('Eliminar')}}
+      </a>
     </div>
   </div>
 </div>

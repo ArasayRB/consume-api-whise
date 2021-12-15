@@ -14,6 +14,7 @@ use App\Http\Livewire\WhiseList;
 |
 */
 Route::redirect('/','/dashboard/estates');
+Route::redirect('/dashboard','/dashboard/estates');
 Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard/estates')
        ->group(function(){
          Route::get('/', WhiseList::class)->name('dashboard');
