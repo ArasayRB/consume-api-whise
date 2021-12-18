@@ -18,7 +18,10 @@
     </head>
     <body>
         <div class="font-sans text-gray-900 antialiased">
-          <p class="text-center text-5xl bg-gray-100 pt-5">{{__('Arasay Rodriguez Bastida')}}</p>
+          @auth
+            <p class="text-center text-5xl bg-gray-100 pt-5">{{Auth::user()->name}}</p>
+          @endauth
+          
           @if (Route::has('login'))
               <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                   @auth

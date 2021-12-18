@@ -16,6 +16,8 @@ require('./components/Example');
 require('./components/whise/Data');
 require('./components/whise/Form');
 require('./components/whise/Tasks');
+require('./components/whise/TaskHeader');
+require('./components/whise/TaskItem');
 
 import Alpine from 'alpinejs';
 

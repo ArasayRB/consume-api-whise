@@ -3,19 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
+
+    /**
+    * Validator request
+    */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'date' => ['required', 'date'],
+            'property_id' => ['required'],
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($name, $id, $purpose, $status)
     {
-      $tasks = Task::orderBy('updated_at', 'DESC')->get();
-      return response() -> json(['status' => 200, 'tasks' => $tasks]);
+      return view('app',['property'=>['name'=>$name, 'id'=>$id, 'purpose'=>$purpose, 'status'=>$status],'status'=>200]);//response() -> json(['status' => 200, 'tasks' => $tasks]);
+    }
+
+    /**
+    * Get a list of tasks by Property
+    *@param int $property_id
+    * @return json $tasks
+    */
+    public function getTasksByProperty(int $property_id):object
+    {
+      $tasks = Task::where('property_id',$property_id)->orderBy('updated_at', 'DESC')->get();
+      if (count($tasks)==0) {
+        $tasks=array(['id'=>0,'name'=>'','date'=>'','description'=>'','property_id'=>$property_id]);
+        return response()->json($tasks);
+      }
+
+      return response()->json($tasks);
     }
 
     /**
@@ -34,17 +64,16 @@ class TasksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request):object
     {
-      $newTask = Task::create([
-          'name' => $request->name,
-          'description' => $request->description,
-          'date' => $request->date,
-          'property_id'=>$request->property_id
-      ]);
-      if($newTask){
-          return response()->json(["status" => 200]);
-      }
+      $this->validator($request->all())->validate();
+      $newTask = new Task();
+      $newTask->name=$request->name;
+      $newTask->description=$request->description;
+      $newTask->date=$request->date;
+      $newTask->property_id=$request->property_id['property_id'];
+      $newTask->save();
+          return response()->json($newTask);
     }
 
     /**
@@ -66,8 +95,7 @@ class TasksController extends Controller
      */
     public function edit(int $task)
     {
-      $tasks = Task::find($task);
-      return response()->json(['status' => 200, 'tasks' => $tasks]);
+      //
     }
 
     /**
@@ -79,14 +107,7 @@ class TasksController extends Controller
      */
     public function update(Request $request, int $task)
     {
-      $tasks = Task::find($task);
-      $tasks->name = $request->name;
-      $tasks->description = $request->description;
-      $tasks->date = $request->date;
-      $tasks->property_id = $request->property_id;
-      if($tasks -> save()){
-          return response()->json(["status" => 200]);
-      }
+      //
     }
 
     /**
@@ -95,11 +116,11 @@ class TasksController extends Controller
      * @param  int  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $task)
+    public function destroy(int $task):object
     {
-      $tasks = Task::find($id);
+      $tasks = Task::find($task);
       if($tasks -> delete()){
-          return response()->json(["status" => 200]);
+          return response()->json(["tasks"=>$tasks,"status" => 200]);
       }
     }
 }

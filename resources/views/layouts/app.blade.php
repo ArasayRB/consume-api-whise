@@ -35,7 +35,9 @@
 
             <!-- Page Content -->
             <main>
-              <p class="text-center text-5xl bg-gray-100 pt-5">{{__('Arasay Rodriguez Bastida')}}</p>              
+              @auth
+                <p class="text-center text-5xl bg-gray-100 pt-5">{{Auth::user()->name}}</p>
+              @endauth
                 {{ $slot }}
             </main>
         </div>
@@ -43,5 +45,18 @@
         @stack('modals')
 
         @livewireScripts
+        <script type="text/javascript">
+          window.CSRF_TOKEN = '{{ csrf_token() }}';
+          @auth
+          @isset($tasks)
+            window.Tasks = {!!json_encode($tasks, true)!!};
+          @endisset
+          @isset($property)
+            window.Property = {!!json_encode($property, true)!!};
+          @endisset
+             window.UserId = {!! json_encode(Auth::user(), true) !!};
+          @else
+             window.UserId =[];
+          @endauth
     </body>
 </html>

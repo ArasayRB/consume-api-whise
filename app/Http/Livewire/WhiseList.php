@@ -174,6 +174,9 @@ class WhiseList extends Component
       elseif ($this->estates[$i]->purposeStatus->id=='1' || $this->estates[$i]->purposeStatus->id=='15') {
         $this->estates[$i]->statusSale='for-sale';
       }
+      else {
+        $this->estates[$i]->statusSale='';
+      }
     }
   }
 
@@ -201,7 +204,7 @@ class WhiseList extends Component
 
       if ($results!='') {
         return $results;
-      }      
+      }
 
       return $this->estates;
   }

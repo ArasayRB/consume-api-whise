@@ -25,7 +25,7 @@
 
     </p>
     <div class="mt-4 flex">
-      <a href="/dashboard/estates/tasks" class="btn bg-indigo-600 mr-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+      <a href="/dashboard/estates/tasks/{{$estate->address}}/{{$estate->id}}/{{$estate->purposeStatus->id}}/{{$estate->statusSale}}" class="btn bg-indigo-600 mr-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
         {{__('Recordatorios')}}
       </a>
       <a href="#" class="btn bg-indigo-600 mr-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">

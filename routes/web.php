@@ -18,10 +18,12 @@ Route::redirect('/dashboard','/dashboard/estates');
 Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard/estates')
        ->group(function(){
          Route::get('/', WhiseList::class)->name('dashboard');
-         Route::get('/tasks',function()
-         {
-           return view('app');
-         });
          Route::get('/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])
          ->name('apiWithJWT');
+         Route::resource('/tasks', App\Http\Controllers\TasksController::class,['except'=>['index']]);
+         Route::prefix('tasks')->group(function()
+       {
+         Route::get('/{name}/{id}/{purpose}/{status}',[App\Http\Controllers\TasksController::class, 'index'])->name('indexTasks');
+         Route::get('/list/{id}',[App\Http\Controllers\TasksController::class, 'getTasksByProperty'])->name('getTasksByProperty');
+       });
        });
