@@ -4,7 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;use GuzzleHttp\Client;
 use Livewire\WithPagination;
-use GuzzleHttp\Exception\RequestException;
+//use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use App\Models\Whise\WhiseList as WhiseModel;
 
@@ -81,14 +82,10 @@ class WhiseList extends Component
   */
   public static function getHttpHeaders()
   {
-      $bearerToken = "".env('API_WHISE_TOKEN')."";
 
       $headers = [
-        'headers' => [
           'Content-Type' => 'application/json',
-          'Authorization' => 'Bearer ' .$bearerToken,
-        ],
-        'http_errors' => false,
+          'http_errors' => false,
       ];
 
       return $headers;
@@ -187,13 +184,13 @@ class WhiseList extends Component
   */
   public function mount()
   {
-      $client = new Client(self::getHttpHeaders());
-
       $url = "".env('API_WHISE_URL')."";
 
-      $response = $client->post($url, [
-        'json' => self::getParams()
-      ]);
+      $response = Http::withHeaders(self::getHttpHeaders())
+                       ->withToken(''.env('API_WHISE_TOKEN').'')
+                       ->post($url, [
+                          'json' => self::getParams(),
+                      ]);
 
       $responseBody = json_decode($response->getBody());
       $this->estates=collect($responseBody->estates);
