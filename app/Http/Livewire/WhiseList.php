@@ -81,7 +81,7 @@ class WhiseList extends Component
   */
   public static function getHttpHeaders()
   {
-      $bearerToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImlhdCI6MTYzODgxNzM3MH0.eyJzZXJ2aWNlQ29uc3VtZXJJZCI6MTg3LCJ0eXBlSWQiOjcsImNsaWVudElkIjoyNTkwLCJvZmZpY2VJZCI6NDM2OH0.wqcbLPs4I0YAa0HN4rxiV5S0waqx7SI2_Ckv_CwubJo';
+      $bearerToken = "".env('API_WHISE_TOKEN')."";
 
       $headers = [
         'headers' => [
@@ -189,7 +189,7 @@ class WhiseList extends Component
   {
       $client = new Client(self::getHttpHeaders());
 
-      $url = "https://api.whise.eu/v1/estates/list";
+      $url = "".env('API_WHISE_URL')."";
 
       $response = $client->post($url, [
         'json' => self::getParams()
@@ -221,7 +221,8 @@ class WhiseList extends Component
       $paginate=self::mount();
       return view('livewire.whise-list',[
             'paginate'=> $paginate->paginate(10),
-            'selected'=>$this->status->keys()
+            'selected'=>$this->status->keys(),
+            'api_url'=>env('API_WHISE_URL')
         ]);
   }
 }
