@@ -7,7 +7,8 @@ use Livewire\WithPagination;
 //use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
-use App\Models\Whise\WhiseList as WhiseModel;
+//use App\Models\Whise\WhiseList as WhiseModel;
+use App\Models\Livewire\WhiseList as WhiseModel;
 
 class WhiseList extends Component
 {
@@ -64,7 +65,7 @@ class WhiseList extends Component
   public function searchBy()
   {
     if ($this->filters['address']!='' && $this->filters['statusSale']=='') {
-      return self::getAddressProperty();//$this->estates->where('address',$this->filters['address']);
+      return self::getAddressProperty();
     }
     elseif ($this->filters['statusSale']!='' && $this->filters['address']=='') {
       return self::getStatusSaleProperty();
@@ -73,79 +74,6 @@ class WhiseList extends Component
       return self::getFilterProperty();
     }
     return '';
-  }
-
-  /**
-  * Get Http Header using Bearer token.
-  *
-  * @return array
-  */
-  public static function getHttpHeaders()
-  {
-
-      $headers = [
-          'Content-Type' => 'application/json',
-          'http_errors' => false,
-      ];
-
-      return $headers;
-  }
-
-  /**
-  * Get Http Params.
-  *
-  * @return array
-  */
-  public function getParams()
-  {
-     $params = [
-       "filter"=> [
-         "statusIds"=> [1],
-         "DisplayStatusIds"=> [1,2,3,4,5],
-         "estateIds"=> [],
-         "IncludeGroupEstates"=> true,
-         "LanguageId"=> "fr-BE"
-       ]
-     ];
-
-     return $params;
-  }
-
-  /**
-  *Get Status of Property
-  *
-  * @return array
-  */
-  public function getStatusProperty()
-  {
-    $status=[
-        'sold'=>[
-          'card'=>'... w-82 max-w-full border border-gray-300 rounded-sm bg-gray-200',
-          'text'=>''
-        ],
-        'owner-s'=>[
-          'card'=>'... w-82 max-w-full border border-gray-300 rounded-sm bg-red-700',
-          'text'=>'text-light'
-        ],
-        'owner-r'=>[
-          'card'=>'... w-82 max-w-full border border-gray-300 rounded-sm bg-yellow-300',
-          'text'=>''
-        ],
-        'for-sale'=>[
-          'card'=>'... w-82 max-w-full border border-gray-300 rounded-sm bg-yellow-500',
-          'text'=>''
-        ],
-        'under-offer'=>[
-          'card'=>'... w-82 max-w-full border border-gray-300 rounded-sm bg-green-400',
-          'text'=>''
-        ],
-        'other'=>[
-          'card'=>'... w-82 max-w-full border border-gray-300 rounded-sm',
-          'text'=>''
-        ]
-    ];
-
-    return $status;
   }
 
   /**
@@ -186,16 +114,16 @@ class WhiseList extends Component
   {
       $url = "".env('API_WHISE_URL')."";
 
-      $response = Http::withHeaders(self::getHttpHeaders())
+      $response = Http::withHeaders(WhiseModel::getHttpHeaders())
                        ->withToken(''.env('API_WHISE_TOKEN').'')
                        ->post($url, [
-                          'json' => self::getParams(),
+                          'json' => WhiseModel::getParams(),
                       ]);
 
       $responseBody = json_decode($response->getBody());
       $this->estates=collect($responseBody->estates);
       self::setStatusProperty();
-      $this->status=collect(self::getStatusProperty());
+      $this->status=collect(WhiseModel::getStatus());
 
       $results=self::searchBy();
 
@@ -213,13 +141,10 @@ class WhiseList extends Component
   */
   public function render()
   {
-    //$filtered= $this->estates
-    //return $filtered->all();
       $paginate=self::mount();
       return view('livewire.whise-list',[
             'paginate'=> $paginate->paginate(10),
-            'selected'=>$this->status->keys(),
-            'api_url'=>env('API_WHISE_URL')
+            'selected'=>$this->status->keys()
         ]);
   }
 }
