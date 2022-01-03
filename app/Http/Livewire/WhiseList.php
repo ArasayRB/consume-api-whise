@@ -2,60 +2,25 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;use GuzzleHttp\Client;
-use Livewire\WithPagination;
-//use GuzzleHttp\Exception\RequestException;
+use App\Models\Property;
+use App\Traits\PropertyTrait;
+use App\Traits\WhiseClientTrait;
+use App\Models\Livewire\WhiseList as WhiseModel;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
-//use App\Models\Whise\WhiseList as WhiseModel;
-use App\Models\Livewire\WhiseList as WhiseModel;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class WhiseList extends Component
 {
-  use WithPagination;
+  use WithPagination, PropertyTrait, WhiseClientTrait;
 
   public $estates;
   public $status;
   public $filters=[
-    'address'=>'',
+    'name'=>'',
     'statusSale'=>''
   ];
-
-  /**
-  * Filter by Address
-  *
-  * @return array
-  */
-  public function getAddressProperty()
-  {
-    $filtered= $this->estates->where('address',$this->filters['address']);
-
-    return $filtered;
-  }
-
-  /**
-  * Filter by Status Sale
-  *
-  * @return array
-  */
-  public function getStatusSaleProperty()
-  {
-    $filtered= $this->estates->where('statusSale',$this->filters['statusSale']);
-
-    return $filtered;
-  }
-
-  /**
-  * Filter by
-  *
-  * @return array
-  */
-  public function getFilterProperty()
-  {
-    $filtered= $this->estates->where('statusSale',$this->filters['statusSale']);
-
-    return $filtered->where('address',$this->filters['address']);
-  }
 
   /**
   * Search by
@@ -64,14 +29,14 @@ class WhiseList extends Component
   */
   public function searchBy()
   {
-    if ($this->filters['address']!='' && $this->filters['statusSale']=='') {
-      return self::getAddressProperty();
+    if ($this->filters['name']!='' && $this->filters['statusSale']=='') {
+      return WhiseModel::getNameProperty($this->estates,$this->filters['name']);
     }
-    elseif ($this->filters['statusSale']!='' && $this->filters['address']=='') {
-      return self::getStatusSaleProperty();
+    elseif ($this->filters['statusSale']!='' && $this->filters['name']=='') {
+      return WhiseModel::getStatusSaleProperty($this->estates,$this->filters['statusSale']);
     }
-    elseif ($this->filters['statusSale']!='' && $this->filters['address']!='') {
-      return self::getFilterProperty();
+    elseif ($this->filters['statusSale']!='' && $this->filters['name']!='') {
+      return WhiseModel::getFilterProperty($this->estates,$this->filters);
     }
     return '';
   }
@@ -81,28 +46,9 @@ class WhiseList extends Component
   *
   * @return void
   */
-  public function setStatusProperty()
+  public function setStatusProperty():void
   {
-    for ($i=0; $i < count($this->estates); $i++) {
-      if ($this->estates[$i]->purposeStatus->id=='3' || $this->estates[$i]->purposeStatus->id=='17') {
-        $this->estates[$i]->statusSale='sold';
-      }
-      elseif ($this->estates[$i]->purposeStatus->id=='5' || $this->estates[$i]->purposeStatus->id=='16') {
-        $this->estates[$i]->statusSale='under-offer';
-      }
-      elseif ($this->estates[$i]->purposeStatus->id=='12') {
-        $this->estates[$i]->statusSale='owner-s';
-      }
-      elseif ($this->estates[$i]->purposeStatus->id=='13') {
-        $this->estates[$i]->statusSale='owner-r';
-      }
-      elseif ($this->estates[$i]->purposeStatus->id=='1' || $this->estates[$i]->purposeStatus->id=='15') {
-        $this->estates[$i]->statusSale='for-sale';
-      }
-      else {
-        $this->estates[$i]->statusSale='';
-      }
-    }
+    $this->estates=WhiseModel::setStatusProperty($this->estates);
   }
 
   /**
@@ -112,18 +58,12 @@ class WhiseList extends Component
   */
   public function mount()
   {
-      $url = "".env('API_WHISE_URL')."";
-
-      $response = Http::withHeaders(WhiseModel::getHttpHeaders())
-                       ->withToken(''.env('API_WHISE_TOKEN').'')
-                       ->post($url, [
-                          'json' => WhiseModel::getParams(),
-                      ]);
-
-      $responseBody = json_decode($response->getBody());
-      $this->estates=collect($responseBody->estates);
+      //$connection=$this->apiWithJWT();
+      $this->estates=$this->getProperties();//collect($connection->estates);
       self::setStatusProperty();
       $this->status=collect(WhiseModel::getStatus());
+
+      //$this->store($this->estates, $this->status);
 
       $results=self::searchBy();
 

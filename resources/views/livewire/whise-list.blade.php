@@ -4,7 +4,7 @@
 		  </x-table.header.header-menu-left-select>
 	  	<x-table.header.header-menu-right>
         <x-table.header.header-menu-right-search>
-          <input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="Búsqueda por nombre..." wire:model="filters.address">
+          <input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="Búsqueda por nombre..." wire:model="filters.name">
         </x-table.header.header-menu-right-search>
 		  	<x-table.header.header-menu-right-button>
 		  		{{__('Sincronizar')}}
@@ -18,19 +18,19 @@
                 <tr>
                   <x-card.grid-card>
                     @foreach ($paginate as $estate)
-                      @if ($estate->purposeStatus->id=='3' || $estate->purposeStatus->id=='17')
+                      @if ($estate->purpose_status=='3' || $estate->purpose_status=='17')
                         <x-card.body :estate="$estate" :status="$status['sold']['card']">
                         </x-card.body>
-                      @elseif ($estate->purposeStatus->id=='5' || $estate->purposeStatus->id=='16')
+                      @elseif ($estate->purpose_status=='5' || $estate->purpose_status=='16')
                         <x-card.body :estate="$estate" :status="$status['under-offer']['card']">
                         </x-card.body>
-                      @elseif ($estate->purposeStatus->id=='12')
+                      @elseif ($estate->purpose_status=='12')
                         <x-card.body :estate="$estate" :status="$status['owner-s']['card']">
                         </x-card.body>
-                      @elseif ($estate->purposeStatus->id=='13')
+                      @elseif ($estate->purpose_status=='13')
                         <x-card.body :estate="$estate" :status="$status['owner-r']['card']">
                         </x-card.body>
-                      @elseif ($estate->purposeStatus->id=='1' || $estate->purposeStatus->id=='15')
+                      @elseif ($estate->purpose_status=='1' || $estate->purpose_status=='15')
                           <x-card.body :estate="$estate" :status="$status['for-sale']['card']">
                           </x-card.body>
                       @else

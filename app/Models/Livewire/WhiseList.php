@@ -46,7 +46,7 @@ class WhiseList extends Model
       ];
 
       self::$filters=[
-        'address'=>'',
+        'name'=>'',
         'statusSale'=>''
       ];
     }
@@ -61,13 +61,88 @@ class WhiseList extends Model
     }
 
     /**
+    * Filter by Name
+    *
+    * @param object $estates
+    * @param string $filter
+    *
+    * @return object
+    */
+    public static function getNameProperty(object $estates, string $filter):object
+    {
+      $filtered= $estates->where('name',$filter);
+
+      return $filtered;
+    }
+
+    /**
+    * Filter by Status Sale
+    *
+    * @param object $estates
+    * @param string $filter
+    *
+    * @return object
+    */
+    public static function getStatusSaleProperty(object $estates, string $filter):object
+    {
+      $filtered= $estates->where('statusSale',$filter);
+
+      return $filtered;
+    }
+
+    /**
+    * Filter by
+    *
+    * @param object $estates
+    * @param array $filter
+    *
+    * @return object
+    */
+    public static function getFilterProperty(object $estates, array $filter):object
+    {
+      $filtered= $estates->where('statusSale',$filter['statusSale']);
+
+      return $filtered->where('name',$filter['name']);
+    }
+
+    /**
+    * Set status to Property
+    *
+    * @return object
+    */
+    public static function setStatusProperty(object $estates):object
+    {
+      for ($i=0; $i < count($estates); $i++) {
+        if ($estates[$i]->purpose_status=='3' || $estates[$i]->purpose_status=='17') {
+          $estates[$i]->statusSale='sold';
+        }
+        elseif ($estates[$i]->purpose_status=='5' || $estates[$i]->purpose_status=='16') {
+          $estates[$i]->statusSale='under-offer';
+        }
+        elseif ($estates[$i]->purpose_status=='12') {
+          $estates[$i]->statusSale='owner-s';
+        }
+        elseif ($estates[$i]->purpose_status=='13') {
+          $estates[$i]->statusSale='owner-r';
+        }
+        elseif ($estates[$i]->purpose_status=='1' || $estates[$i]->purpose_status=='15') {
+          $estates[$i]->statusSale='for-sale';
+        }
+        else {
+          $estates[$i]->statusSale='';
+        }
+      }
+      return $estates;
+    }
+
+    /**
     * Get Default Filters Configuration
     * @return array
     */
     public static function getDefaultFiltersConfig():array
     {
       return $filters=[
-        'address'=>'',
+        'name'=>'',
         'statusSale'=>''
       ];
     }

@@ -20,6 +20,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard/estates')
          Route::get('/', WhiseList::class)->name('dashboard');
          Route::get('/list', [App\Http\Controllers\WhiseClient_Controller::class, 'apiWithJWT'])
          ->name('apiWithJWT');
+         Route::resource('/properties', App\Http\Controllers\PropertyController::class,['except'=>['edit', 'update', 'create']]);
+         Route::get('/sync', [App\Http\Controllers\WhiseClient_Controller::class, 'whiseWithJWT'])->name('sync');
          Route::resource('/tasks', App\Http\Controllers\TasksController::class,['except'=>['index']]);
          Route::prefix('tasks')->group(function()
        {

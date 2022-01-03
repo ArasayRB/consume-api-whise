@@ -2,23 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\Property;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Property extends Model
 {
     use HasFactory;
 
     protected $fillable=[
       'name',
-      'description',
-      'date',
-      'property_id'
+      'purpose_status',
+      'reference_id'
     ];
 
-    public function property()
+    public function tasks()
     {
-      return $this->belongsTo(Property::class)->withTimestamps();
+      return $this->hasMany(Task::class)->withTimestamps();
     }
 }
