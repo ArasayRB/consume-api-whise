@@ -58,12 +58,9 @@ class WhiseList extends Component
   */
   public function mount()
   {
-      //$connection=$this->apiWithJWT();
-      $this->estates=$this->getProperties();//collect($connection->estates);
+      $this->estates=$this->getProperties();
       self::setStatusProperty();
       $this->status=collect(WhiseModel::getStatus());
-
-      //$this->store($this->estates, $this->status);
 
       $results=self::searchBy();
 

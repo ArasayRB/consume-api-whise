@@ -6,9 +6,6 @@ use App\Traits\PropertyTrait;
 use App\Models\Livewire\WhiseList as WhiseModel;
 use App\Traits\WhiseClientTrait;
 use Illuminate\Support\Facades\Http;
-//use GuzzleHttp\Client;
-//use GuzzleHttp\Exception\RequestException;
-//use GuzzleHttp\Psr7\Request;
 use Illuminate\Http\Request;
 
 class WhiseClient_Controller extends Controller
